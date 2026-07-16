@@ -265,7 +265,7 @@ return;
 
 
 
-let message="🛒 Yangi buyurtma\n\n";
+let message=" Assalomu alaykum!\n🛒 Yangi buyurtma\n\n";
 
 
 cart.forEach(item=>{

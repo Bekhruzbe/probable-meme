@@ -93,7 +93,6 @@ images[current].classList.add("active");
 },3000);
 
 
-
 let cart = [];
 
 
@@ -286,7 +285,7 @@ return;
 
 
 
-let message=" Assalomu alaykum!\n🛒 Yangi buyurtma\n\n";
+let message="🛒 Yangi buyurtma\n\n";
 
 
 cart.forEach(item=>{

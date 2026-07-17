@@ -1,346 +1,246 @@
-// ===============================
-// WELCOME SCREEN
-// ===============================
+/* ==========================
+   TELEGRAM USERNAME
+   (buyurtma shu username'ga ochiladi)
+========================== */
+const TELEGRAM_USERNAME = "inomoof";
 
-const enterBtn = document.getElementById("enterBtn");
-const welcome = document.getElementById("welcome");
-const shop = document.getElementById("shop");
-
-enterBtn.addEventListener("click", () => {
-
-    welcome.style.opacity = "0";
-    welcome.style.transition = "1s";
-
-    setTimeout(() => {
-
-        welcome.style.display = "none";
-        shop.style.display = "block";
-
-    },1000);
-
-});
-
-
-// ===============================
-// PAGE NAVIGATION
-// ===============================
-
-const navButtons = document.querySelectorAll(".navBtn");
-
-const pages = {
-    shop: document.getElementById("shop"),
-    cart: document.getElementById("cart"),
-    contact: document.getElementById("contact")
-};
-
-
-navButtons.forEach(button => {
-
-    button.addEventListener("click",()=>{
-
-        let page = button.dataset.page;
-
-
-        Object.values(pages).forEach(item=>{
-
-            item.style.display="none";
-
-        });
-
-
-        pages[page].style.display="block";
-
-
-        navButtons.forEach(btn=>{
-
-            btn.classList.remove("active");
-
-        });
-
-
-        button.classList.add("active");
-
-
-    });
-
-
-});
-
-
-
-// ===============================
-// SHOPPING CART
-// ===============================
-
-let images=document.querySelectorAll(".slider img");
-
-let current=0;
-
-setInterval(()=>{
-
-images[current].classList.remove("active");
-
-current++;
-
-if(current>=images.length){
-
-current=0;
-
-}
-
-images[current].classList.add("active");
-
-},3000);
-
-
+/* ==========================
+   SAVAT (CART) STATE
+   Har bir element: { name, color, price, qty }
+   key = name + '__' + color orqali aniqlanadi
+========================== */
 let cart = [];
 
+/* ==========================
+   WELCOME -> SHOP
+========================== */
+const welcome = document.getElementById("welcome");
+const enterBtn = document.getElementById("enterBtn");
 
-const addButtons = document.querySelectorAll(".addCart");
+enterBtn.addEventListener("click", () => {
+  welcome.style.display = "none";
+  showPage("shop");
+});
 
-
-addButtons.forEach(button=>{
-
-
-button.addEventListener("click",()=>{
-
-
-let card = button.parentElement;
-
-
-let name = card.querySelector("h3").innerText;
-
-
-let priceText = card.querySelector(".price").innerText;
-
-
-let price = Number(
-priceText.replace(/\D/g,"")
-);
-
-
-
-let product = {
-
-name:name,
-
-price:price,
-
-quantity:1
-
+/* ==========================
+   BOTTOM NAVIGATION
+========================== */
+const pages = {
+  shop: document.getElementById("shop"),
+  cart: document.getElementById("cart"),
+  contact: document.getElementById("contact"),
 };
 
+const navBtns = document.querySelectorAll(".navBtn");
 
+function showPage(pageName) {
+  Object.keys(pages).forEach((key) => {
+    pages[key].style.display = key === pageName ? "block" : "none";
+  });
 
-let exist = cart.find(item=>item.name===name);
-
-
-
-if(exist){
-
-exist.quantity++;
-
+  navBtns.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.page === pageName);
+  });
 }
 
-else{
-
-cart.push(product);
-
-}
-
-
-
-updateCart();
-
-
-alert("Mahsulot savatchaga qo'shildi 🛒");
-
-
+navBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    showPage(btn.dataset.page);
+  });
 });
 
+/* ==========================
+   SLIDER (rasm almashinuvi)
+========================== */
+const sliderIntervals = new Map();
 
+document.querySelectorAll(".slider").forEach((slider) => {
+  const imgs = slider.querySelectorAll("img");
+  if (imgs.length <= 1) return;
+
+  let current = 0;
+
+  const intervalId = setInterval(() => {
+    imgs[current].classList.remove("active");
+    current = (current + 1) % imgs.length;
+    imgs[current].classList.add("active");
+  }, 3000);
+
+  sliderIntervals.set(slider, intervalId);
 });
 
+/* ==========================
+   RANG TANLASH (COLOR SELECT)
+   -> mos rasmni sliderda ko'rsatadi
+========================== */
+document.querySelectorAll(".card").forEach((card) => {
+  const colorBtns = card.querySelectorAll(".colorBtn");
+  const slider = card.querySelector(".slider");
+  const imgs = slider.querySelectorAll("img");
 
+  colorBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      colorBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
 
+      // shu rangga mos rasmni doimiy ko'rsatish, avtomatik aylanishni to'xtatish
+      const intervalId = sliderIntervals.get(slider);
+      if (intervalId) {
+        clearInterval(intervalId);
+        sliderIntervals.delete(slider);
+      }
 
-// ===============================
-// UPDATE CART
-// ===============================
-
-
-function updateCart(){
-
-
-const cartBox = document.getElementById("cartItems");
-
-
-
-if(cart.length===0){
-
-cartBox.innerHTML="Savatcha bo'sh";
-
-document.getElementById("totalPrice").innerText=0;
-
-return;
-
-}
-
-
-
-let html="";
-
-let total=0;
-
-
-
-cart.forEach((item,index)=>{
-
-
-total += item.price * item.quantity;
-
-
-html += `
-
-<div class="cart-item">
-
-<h3>${item.name}</h3>
-
-<p>
-${item.quantity} dona
-</p>
-
-<p>
-${item.price * item.quantity} so'm
-</p>
-
-
-<button onclick="removeItem(${index})">
-
-❌
-
-</button>
-
-
-</div>
-
-`;
-
-
+      const targetImage = btn.dataset.image;
+      imgs.forEach((img) => {
+        img.classList.toggle("active", img.src === targetImage);
+      });
+    });
+  });
 });
 
+/* ==========================
+   SAVATGA QO'SHISH
+========================== */
 
+document.querySelectorAll(".addCart").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const card = btn.closest(".card");
+    const name = card.dataset.name;
+    const price = parseInt(card.dataset.price, 10);
+    const activeColorBtn = card.querySelector(".colorBtn.active");
+    const color = activeColorBtn ? activeColorBtn.dataset.color : "";
+    const image = activeColorBtn ? activeColorBtn.dataset.image : "";
 
-cartBox.innerHTML=html;
+    const existing = cart.find(
+      (item) => item.name === name && item.color === color
+    );
 
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, color, price, qty: 1, image });
+    }
 
-document.getElementById("totalPrice").innerText=
-total.toLocaleString();
+    renderCart();
 
-
-
-}
-
-
-
-
-// ===============================
-// REMOVE CART ITEM
-// ===============================
-
-
-function removeItem(index){
-
-
-cart.splice(index,1);
-
-
-updateCart();
-
-
-}
-
-
-
-// ===============================
-// ORDER BUTTON
-// ===============================
-
-
-const orderBtn =
-document.getElementById("orderBtn");
-
-
-
-orderBtn.addEventListener("click",()=>{
-
-
-if(cart.length===0){
-
-alert("Avval mahsulot tanlang!");
-
-return;
-
-}
-
-
-
-let message="🛒 Yangi buyurtma\n\n";
-
-
-cart.forEach(item=>{
-
-
-message += 
-`
-⌚ ${item.name}
-📦 ${item.quantity} dona
-💰 ${item.price * item.quantity} so'm
-
-`;
-
+    btn.textContent = "Qo'shildi ✅";
+    setTimeout(() => {
+      btn.textContent = "Savatga qo'shish";
+    }, 1000);
+  });
 });
 
+/* ==========================
+   SAVATNI CHIZISH (RENDER)
+========================== */
+const cartItemsBox = document.getElementById("cartItems");
+const totalPriceEl = document.getElementById("totalPrice");
 
-message +=
-`
-Jami:
-${document.getElementById("totalPrice").innerText} so'm
-`;
+function renderCart() {
+  cartItemsBox.innerHTML = "";
 
+  if (cart.length === 0) {
+    cartItemsBox.innerHTML = "Savat bo'sh";
+    totalPriceEl.textContent = "0";
+    return;
+  }
 
+  let total = 0;
 
-// hozircha Telegram chat ochadi
+  cart.forEach((item, index) => {
+    const lineTotal = item.price * item.qty;
+    total += lineTotal;
 
-let telegramURL =
-"https://t.me/inomoof?text="
-+
-encodeURIComponent(message);
+    const row = document.createElement("div");
+    row.className = "cartRow";
 
+    row.innerHTML = `
+      <div class="cartImage">
+        <img src="${item.image}" alt="${item.name}">
+      </div>
+      <div class="cartInfo">
+        <h4>${item.name}</h4>
+        <span class="cartColorTag">${item.color}</span>
+        <p class="cartLineTotal">${item.price.toLocaleString("ru-RU")} so'm &times; ${item.qty} = <b>${lineTotal.toLocaleString("ru-RU")} so'm</b></p>
+        <div class="cartControls">
+          <button class="qtyBtn minusBtn" data-index="${index}">−</button>
+          <span class="qtyNumber">${item.qty}</span>
+          <button class="qtyBtn plusBtn" data-index="${index}">+</button>
+        </div>
+      </div>
+      <button class="removeBtn" data-index="${index}" title="Bekor qilish">
+        <i class="fa-solid fa-trash"></i>
+        <span>Bekor qilish</span>
+      </button>
+    `;
 
+    cartItemsBox.appendChild(row);
+  });
 
-window.open(telegramURL,"_blank");
+  totalPriceEl.textContent = total.toLocaleString("ru-RU");
 
+  attachCartControlEvents();
+}
 
+function attachCartControlEvents() {
+  document.querySelectorAll(".plusBtn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = parseInt(btn.dataset.index, 10);
+      cart[i].qty += 1;
+      renderCart();
+    });
+  });
 
+  document.querySelectorAll(".minusBtn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = parseInt(btn.dataset.index, 10);
+      cart[i].qty -= 1;
+      if (cart[i].qty <= 0) {
+        cart.splice(i, 1);
+      }
+      renderCart();
+    });
+  });
+
+  document.querySelectorAll(".removeBtn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = parseInt(btn.dataset.index, 10);
+      cart.splice(i, 1);
+      renderCart();
+    });
+  });
+}
+
+/* ==========================
+   BUYURTMA BERISH -> TELEGRAM
+========================== */
+const orderBtn = document.getElementById("orderBtn");
+
+orderBtn.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Savat bo'sh, avval mahsulot qo'shing!");
+    return;
+  }
+
+  let message = "Assalomu alaykum, buyurtma bermoqchiman:\n\n";
+  let total = 0;
+
+  cart.forEach((item) => {
+    const lineTotal = item.price * item.qty;
+    total += lineTotal;
+    message += `• ${item.name} (${item.color}) — ${item.qty} dona — ${lineTotal.toLocaleString("ru-RU")} so'm\n`;
+  });
+
+  message += `\nJami: ${total.toLocaleString("ru-RU")} so'm`;
+
+  const url = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
 });
 
-
-
-
-// ===============================
-// PAGE START
-// ===============================
-
-
-window.onload=()=>{
-
-
-shop.style.display="none";
-
-pages.cart.style.display="none";
-
-pages.contact.style.display="none";
-
-
-};
+/* ==========================
+   BOSHLANG'ICH HOLAT
+========================== */
+showPage("shop");
+pages.cart.style.display = "none";
+pages.contact.style.display = "none";
+renderCart();

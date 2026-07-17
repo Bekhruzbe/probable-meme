@@ -72,6 +72,27 @@ navButtons.forEach(button => {
 // SHOPPING CART
 // ===============================
 
+let images=document.querySelectorAll(".slider img");
+
+let current=0;
+
+setInterval(()=>{
+
+images[current].classList.remove("active");
+
+current++;
+
+if(current>=images.length){
+
+current=0;
+
+}
+
+images[current].classList.add("active");
+
+},3000);
+
+
 
 let cart = [];
 

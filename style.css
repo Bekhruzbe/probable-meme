@@ -168,6 +168,64 @@ box-shadow:
 }
 
 /*=========================
+DELIVERY BADGE
+==========================*/
+
+.deliveryBadge{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:10px;
+
+margin-top:28px;
+
+padding:12px 22px;
+
+border-radius:50px;
+
+background:rgba(212,175,55,.08);
+
+border:1px solid rgba(212,175,55,.4);
+
+color:#f5d67f;
+
+font-size:14px;
+
+font-weight:600;
+
+letter-spacing:.2px;
+
+box-shadow:0 0 20px rgba(212,175,55,.12);
+
+}
+
+.deliveryBadge i{
+
+font-size:15px;
+
+color:#f5d67f;
+
+}
+
+#cart .deliveryBadge{
+
+display:flex;
+
+width:100%;
+
+margin-top:18px;
+
+margin-bottom:5px;
+
+text-align:center;
+
+}
+
+/*=========================
 SHOP
 ==========================*/
 
@@ -1088,4 +1146,315 @@ gap:6px;
 
 .soatlar{
     text-align:center;
+}
+
+/*=========================
+ORDER MODAL - PREMIUM
+==========================*/
+
+.modalOverlay{
+
+display:none;
+
+position:fixed;
+
+inset:0;
+
+background:rgba(5,3,1,.75);
+
+backdrop-filter:blur(8px);
+
+z-index:2000;
+
+align-items:center;
+
+justify-content:center;
+
+padding:20px;
+
+}
+
+.modalOverlay.show{
+
+display:flex;
+
+animation:fadeIn .35s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{opacity:0;}
+
+to{opacity:1;}
+
+}
+
+.modalBox{
+
+position:relative;
+
+width:100%;
+
+max-width:440px;
+
+background:linear-gradient(160deg,#161008,#0b0906 60%,#070707);
+
+border:1px solid rgba(212,175,55,.35);
+
+border-radius:26px;
+
+padding:38px 30px 32px;
+
+box-shadow:
+
+0 25px 70px rgba(0,0,0,.6),
+
+0 0 60px rgba(212,175,55,.1);
+
+animation:modalPop .4s cubic-bezier(.2,.8,.2,1);
+
+}
+
+@keyframes modalPop{
+
+from{
+
+opacity:0;
+
+transform:translateY(30px) scale(.96);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+}
+
+}
+
+.modalClose{
+
+position:absolute;
+
+top:18px;
+
+right:18px;
+
+width:34px;
+
+height:34px;
+
+border-radius:50%;
+
+border:1px solid rgba(212,175,55,.35);
+
+background:rgba(255,255,255,.03);
+
+color:#e8dfc9;
+
+font-size:15px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.modalClose:hover{
+
+background:rgba(212,175,55,.15);
+
+color:#f5d67f;
+
+transform:rotate(90deg);
+
+}
+
+.modalHeader{
+
+text-align:center;
+
+margin-bottom:30px;
+
+}
+
+.modalIcon{
+
+font-size:26px;
+
+color:#f5d67f;
+
+margin-bottom:14px;
+
+display:block;
+
+text-shadow:0 0 20px rgba(212,175,55,.5);
+
+}
+
+.modalHeader h3{
+
+font-family:'Playfair Display',serif;
+
+font-size:24px;
+
+font-weight:700;
+
+background:linear-gradient(45deg,#f5d67f,#d4af37);
+
+-webkit-background-clip:text;
+
+background-clip:text;
+
+color:transparent;
+
+margin-bottom:10px;
+
+}
+
+.modalHeader p{
+
+font-size:13px;
+
+color:#a89f8d;
+
+line-height:1.6;
+
+}
+
+.modalField{
+
+margin-bottom:20px;
+
+}
+
+.modalField label{
+
+display:block;
+
+font-size:12px;
+
+font-weight:600;
+
+letter-spacing:.5px;
+
+color:#d4af37;
+
+margin-bottom:8px;
+
+text-transform:uppercase;
+
+}
+
+.modalField select,
+.modalField input{
+
+width:100%;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+border:1px solid rgba(212,175,55,.3);
+
+background:rgba(255,255,255,.04);
+
+color:#fff;
+
+font-size:15px;
+
+font-family:'Poppins',sans-serif;
+
+outline:none;
+
+transition:.3s;
+
+}
+
+.modalField select option{
+
+background:#161008;
+
+color:#fff;
+
+}
+
+.modalField select:focus,
+.modalField input:focus{
+
+border-color:#d4af37;
+
+box-shadow:0 0 0 3px rgba(212,175,55,.15);
+
+background:rgba(255,255,255,.07);
+
+}
+
+.modalField input::placeholder{
+
+color:#75705f;
+
+}
+
+#confirmOrderBtn{
+
+width:100%;
+
+margin-top:10px;
+
+padding:17px;
+
+border:1px solid rgba(212,175,55,.5);
+
+border-radius:16px;
+
+font-size:17px;
+
+letter-spacing:.5px;
+
+background:linear-gradient(45deg,#d4af37,#f5e7a3,#d4af37);
+
+background-size:200% auto;
+
+color:#1a1208;
+
+cursor:pointer;
+
+font-weight:700;
+
+transition:.5s;
+
+box-shadow:0 10px 30px rgba(212,175,55,.25);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:10px;
+
+}
+
+#confirmOrderBtn:hover{
+
+background-position:right center;
+
+box-shadow:0 15px 40px rgba(212,175,55,.4);
+
+transform:translateY(-3px);
+
+}
+
+.modalField.errorField select,
+.modalField.errorField input{
+
+border-color:#ff6b6b;
+
+box-shadow:0 0 0 3px rgba(255,107,107,.15);
+
 }

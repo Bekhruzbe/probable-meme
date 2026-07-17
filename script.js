@@ -16,8 +16,19 @@ let cart = [];
 ========================== */
 const welcome = document.getElementById("welcome");
 const enterBtn = document.getElementById("enterBtn");
+const brandLogo = document.getElementById("brandLogo");
+
+// Logo: hero (katta, markazda) -> bir oz kutib -> settled (kichikroq, biroz yuqoriroq)
+setTimeout(() => {
+  brandLogo.classList.remove("hero");
+  brandLogo.classList.add("settled");
+}, 1300);
 
 enterBtn.addEventListener("click", () => {
+  // logotip darhol chap yuqori burchakka "uchib" o'tadi va doimiy shu yerda qoladi
+  brandLogo.classList.remove("hero", "settled");
+  brandLogo.classList.add("corner");
+
   welcome.style.display = "none";
   showPage("shop");
 });

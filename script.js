@@ -221,6 +221,24 @@ const confirmOrderBtn = document.getElementById("confirmOrderBtn");
 const regionSelect = document.getElementById("regionSelect");
 const cityInput = document.getElementById("cityInput");
 const phoneInput = document.getElementById("phoneInput");
+const jizzaxNote = document.getElementById("jizzaxNote");
+const cityLabel = document.getElementById("cityLabel");
+
+function isJizzaxShahri() {
+  return regionSelect.value === "Jizzax shahri";
+}
+
+regionSelect.addEventListener("change", () => {
+  if (isJizzaxShahri()) {
+    jizzaxNote.classList.add("show");
+    cityLabel.textContent = "Yandex orqali mo'ljal / manzil";
+    cityInput.placeholder = "Masalan: Katta bozor yonidagi 3-uy, ...";
+  } else {
+    jizzaxNote.classList.remove("show");
+    cityLabel.textContent = "Shahar / Tuman / Mahalla";
+    cityInput.placeholder = "Masalan: Bektemir tumani, ...";
+  }
+});
 
 function openModal() {
   orderModal.classList.add("show");
@@ -282,7 +300,15 @@ confirmOrderBtn.addEventListener("click", () => {
   });
 
   message += `\n💰 Jami: ${total.toLocaleString("ru-RU")} so'm`;
-  message += `\n\n📍 Manzil: ${region}, ${city}`;
+
+  if (isJizzaxShahri()) {
+    message += `\n\n🚀 Yetkazish: Yandex orqali (Jizzax shahri ichida, BEPUL)`;
+    message += `\n📍 Mo'ljal/manzil: ${city}`;
+  } else {
+    message += `\n\n📦 Yetkazish: BTS pochta orqali`;
+    message += `\n📍 Manzil: ${region}, ${city}`;
+  }
+
   message += `\n📞 Telefon: ${phone}`;
 
   const url = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
@@ -295,6 +321,9 @@ confirmOrderBtn.addEventListener("click", () => {
   regionSelect.value = "";
   cityInput.value = "";
   phoneInput.value = "";
+  jizzaxNote.classList.remove("show");
+  cityLabel.textContent = "Shahar / Tuman / Mahalla";
+  cityInput.placeholder = "Masalan: Bektemir tumani, ...";
 });
 
 /* ==========================

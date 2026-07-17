@@ -22,6 +22,156 @@ body{
 }
 
 /*=========================
+BRAND LOGO
+==========================*/
+
+.brandLogo{
+
+position:fixed;
+
+z-index:1500;
+
+object-fit:contain;
+
+border-radius:22px;
+
+transition:top 1s cubic-bezier(.22,.9,.3,1),
+
+left 1s cubic-bezier(.22,.9,.3,1),
+
+width 1s cubic-bezier(.22,.9,.3,1),
+
+height 1s cubic-bezier(.22,.9,.3,1),
+
+transform 1s cubic-bezier(.22,.9,.3,1),
+
+box-shadow .6s ease;
+
+pointer-events:none;
+
+}
+
+.brandLogo.hero{
+
+top:38%;
+
+left:50%;
+
+width:240px;
+
+height:240px;
+
+transform:translate(-50%,-50%) scale(.5);
+
+opacity:0;
+
+animation:logoPopIn 1.1s cubic-bezier(.22,.9,.3,1) forwards;
+
+}
+
+@keyframes logoPopIn{
+
+0%{
+
+transform:translate(-50%,-50%) scale(.4);
+
+opacity:0;
+
+}
+
+65%{
+
+transform:translate(-50%,-50%) scale(1.08);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translate(-50%,-50%) scale(1);
+
+opacity:1;
+
+}
+
+}
+
+.brandLogo.settled{
+
+top:20%;
+
+left:50%;
+
+width:150px;
+
+height:150px;
+
+transform:translate(-50%,-50%) scale(1);
+
+opacity:1;
+
+box-shadow:0 0 40px rgba(212,175,55,.25);
+
+}
+
+.brandLogo.corner{
+
+top:16px;
+
+left:16px;
+
+width:58px;
+
+height:58px;
+
+transform:translate(0,0) scale(1);
+
+opacity:1;
+
+border-radius:16px;
+
+box-shadow:0 6px 25px rgba(0,0,0,.45),0 0 20px rgba(212,175,55,.3);
+
+}
+
+@media(max-width:768px){
+
+.brandLogo.hero{
+
+width:170px;
+
+height:170px;
+
+top:30%;
+
+}
+
+.brandLogo.settled{
+
+width:110px;
+
+height:110px;
+
+top:16%;
+
+}
+
+.brandLogo.corner{
+
+width:46px;
+
+height:46px;
+
+top:12px;
+
+left:12px;
+
+}
+
+}
+
+/*=========================
 WELCOME
 ==========================*/
 
@@ -103,7 +253,9 @@ font-weight:700;
 
 color:white;
 
-animation:fadeTop 1.5s;
+opacity:0;
+
+animation:fadeTop 1.2s ease 1.6s forwards;
 
 text-shadow:
 
@@ -123,7 +275,9 @@ line-height:1.8;
 
 color:#e8dfff;
 
-animation:fadeBottom 2s;
+opacity:0;
+
+animation:fadeBottom 1.2s ease 1.9s forwards;
 
 }
 
@@ -148,6 +302,10 @@ color:white;
 font-weight:bold;
 
 transition:.4s;
+
+opacity:0;
+
+animation:fadeBottom 1.1s ease 2.4s forwards;
 
 box-shadow:
 
@@ -200,6 +358,10 @@ font-weight:600;
 letter-spacing:.2px;
 
 box-shadow:0 0 20px rgba(212,175,55,.12);
+
+opacity:0;
+
+animation:fadeBottom 1.1s ease 2.15s forwards;
 
 }
 

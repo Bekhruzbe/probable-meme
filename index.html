@@ -46,6 +46,15 @@ va hamyonbop 💯
 </p>
 
 
+<div class="deliveryBadge">
+
+<i class="fa-solid fa-truck-fast"></i>
+
+O'zbekiston bo'ylab BTS pochta orqali yetkaziladi🚚!
+
+</div>
+
+
 <button id="enterBtn">
 
 Online Shop ga kirish
@@ -158,6 +167,14 @@ Savatga qo'shish
 Savat
 </h2>
 
+
+<div class="deliveryBadge">
+
+<i class="fa-solid fa-truck-fast"></i>
+
+O'zbekiston bo'ylab BTS pochta orqali yetkaziladi🚚!
+
+</div>
 
 
 <div id="cartItems">
@@ -274,6 +291,79 @@ data-page="contact">
 
 
 
+
+
+<!-- ORDER MODAL -->
+
+<div id="orderModal" class="modalOverlay">
+
+<div class="modalBox">
+
+<button id="closeModalBtn" class="modalClose">
+<i class="fa-solid fa-xmark"></i>
+</button>
+
+<div class="modalHeader">
+
+<i class="fa-solid fa-gem modalIcon"></i>
+
+<h3>Yetkazib berish ma'lumotlari</h3>
+
+<p>Buyurtmangizni rasmiylashtirish uchun quyidagi maydonlarni to'ldiring</p>
+
+</div>
+
+<div class="modalField">
+
+<label for="regionSelect">Viloyat / Shahar</label>
+
+<select id="regionSelect">
+<option value="" disabled selected>Viloyatni tanlang</option>
+<option>Toshkent shahri</option>
+<option>Toshkent viloyati</option>
+<option>Andijon viloyati</option>
+<option>Farg'ona viloyati</option>
+<option>Namangan viloyati</option>
+<option>Samarqand viloyati</option>
+<option>Buxoro viloyati</option>
+<option>Navoiy viloyati</option>
+<option>Qashqadaryo viloyati</option>
+<option>Surxondaryo viloyati</option>
+<option>Jizzax viloyati</option>
+<option>Sirdaryo viloyati</option>
+<option>Xorazm viloyati</option>
+<option>Qoraqalpog'iston Respublikasi</option>
+</select>
+
+</div>
+
+<div class="modalField">
+
+<label for="cityInput">Shahar / Tuman / Mahalla</label>
+
+<input type="text" id="cityInput" placeholder="Masalan: Bektemir tumani, ...">
+
+</div>
+
+<div class="modalField">
+
+<label for="phoneInput">Telefon raqamingiz</label>
+
+<input type="tel" id="phoneInput" placeholder="+998 90 123 45 67">
+
+</div>
+
+<button id="confirmOrderBtn">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Buyurtma berish
+
+</button>
+
+</div>
+
+</div>
 
 
 <script src="script.js"></script>

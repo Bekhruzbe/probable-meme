@@ -344,3 +344,7 @@ pages.contact.style.display="none";
 
 
 };
+
+.soatlar{
+    text-align:center;
+}

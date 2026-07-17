@@ -212,17 +212,67 @@ function attachCartControlEvents() {
 }
 
 /* ==========================
-   BUYURTMA BERISH -> TELEGRAM
+   BUYURTMA BERISH -> MANZIL MODALI -> TELEGRAM
 ========================== */
 const orderBtn = document.getElementById("orderBtn");
+const orderModal = document.getElementById("orderModal");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const confirmOrderBtn = document.getElementById("confirmOrderBtn");
+const regionSelect = document.getElementById("regionSelect");
+const cityInput = document.getElementById("cityInput");
+const phoneInput = document.getElementById("phoneInput");
+
+function openModal() {
+  orderModal.classList.add("show");
+}
+
+function closeModal() {
+  orderModal.classList.remove("show");
+}
 
 orderBtn.addEventListener("click", () => {
   if (cart.length === 0) {
     alert("Savat bo'sh, avval mahsulot qo'shing!");
     return;
   }
+  openModal();
+});
 
-  let message = "Assalomu alaykum, buyurtma bermoqchiman:\n\n";
+closeModalBtn.addEventListener("click", closeModal);
+
+orderModal.addEventListener("click", (e) => {
+  if (e.target === orderModal) closeModal();
+});
+
+confirmOrderBtn.addEventListener("click", () => {
+  const region = regionSelect.value;
+  const city = cityInput.value.trim();
+  const phone = phoneInput.value.trim();
+
+  let valid = true;
+
+  [regionSelect, cityInput, phoneInput].forEach((el) => {
+    el.closest(".modalField").classList.remove("errorField");
+  });
+
+  if (!region) {
+    regionSelect.closest(".modalField").classList.add("errorField");
+    valid = false;
+  }
+  if (!city) {
+    cityInput.closest(".modalField").classList.add("errorField");
+    valid = false;
+  }
+  if (!phone || phone.replace(/\D/g, "").length < 9) {
+    phoneInput.closest(".modalField").classList.add("errorField");
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  let message = "🛍 Yangi buyurtma!\n\n";
+  message += "📦 Mahsulotlar:\n";
+
   let total = 0;
 
   cart.forEach((item) => {
@@ -231,10 +281,20 @@ orderBtn.addEventListener("click", () => {
     message += `• ${item.name} (${item.color}) — ${item.qty} dona — ${lineTotal.toLocaleString("ru-RU")} so'm\n`;
   });
 
-  message += `\nJami: ${total.toLocaleString("ru-RU")} so'm`;
+  message += `\n💰 Jami: ${total.toLocaleString("ru-RU")} so'm`;
+  message += `\n\n📍 Manzil: ${region}, ${city}`;
+  message += `\n📞 Telefon: ${phone}`;
 
   const url = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
   window.open(url, "_blank");
+
+  closeModal();
+  cart = [];
+  renderCart();
+
+  regionSelect.value = "";
+  cityInput.value = "";
+  phoneInput.value = "";
 });
 
 /* ==========================

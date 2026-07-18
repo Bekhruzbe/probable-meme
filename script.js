@@ -22,7 +22,7 @@ const brandLogo = document.getElementById("brandLogo");
 setTimeout(() => {
   brandLogo.classList.remove("hero");
   brandLogo.classList.add("settled");
-}, 1300);
+}, 2300);
 
 enterBtn.addEventListener("click", () => {
   // logotip darhol chap yuqori burchakka "uchib" o'tadi va doimiy shu yerda qoladi

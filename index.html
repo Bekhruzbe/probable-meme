@@ -102,7 +102,7 @@ Online Shop
 
 
 
-<div class="card" data-name="Trenddagi soat" data-price="205000">
+<div class="card" data-name="Trenddagi soat" data-price="205000" data-product-id="trend-watch">
 
 
 <div class="slider">
@@ -154,6 +154,9 @@ Savatga qo'shish
 
 
 
+
+<div class="reviewsSection" data-product-id="trend-watch"></div>
+
 </div>
 
 
@@ -174,7 +177,7 @@ Savatga qo'shish
 
 
 
-<div class="card" data-name="LA Cap (Lalisa style)" data-price="70000">
+<div class="card" data-name="LA Cap (Lalisa style)" data-price="70000" data-product-id="lalisa-cap">
 
 
 <div class="slider">
@@ -232,6 +235,9 @@ Savatga qo'shish
 
 
 
+
+<div class="reviewsSection" data-product-id="lalisa-cap"></div>
+
 </div>
 
 
@@ -252,7 +258,7 @@ Savatga qo'shish
 
 
 
-<div class="card" data-name="BTS Arirang Cap" data-price="75000">
+<div class="card" data-name="BTS Arirang Cap" data-price="75000" data-product-id="bts-cap">
 
 
 <div class="slider">
@@ -309,6 +315,9 @@ Savatga qo'shish
 </button>
 
 
+
+
+<div class="reviewsSection" data-product-id="bts-cap"></div>
 
 </div>
 
@@ -427,8 +436,22 @@ class="telegram">
 
 </a>
 
-<p class="contactUsername">@inomoof</p>
+</section>
 
+
+<!-- PROFILE -->
+
+
+<section id="profile">
+
+
+<h2>
+Profil
+</h2>
+
+
+<div id="authBox">
+<!-- auth.js shu yerga login/register yoki profilni chizadi -->
 </div>
 
 
@@ -471,6 +494,16 @@ data-page="cart">
 data-page="contact">
 
 <i class="fa-solid fa-headset"></i>
+
+</button>
+
+
+
+<button class="navBtn" id="profileNavBtn"
+
+data-page="profile">
+
+<i class="fa-solid fa-user"></i>
 
 </button>
 
@@ -565,6 +598,10 @@ Buyurtma berish
 
 
 <script src="script.js"></script>
+
+<script type="module" src="firebase-init.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="reviews.js"></script>
 
 
 </body>

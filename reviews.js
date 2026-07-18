@@ -153,15 +153,32 @@ function initReviewsSection(section) {
   });
 
   // ---------- Real vaqtda sharhlarni tinglash ----------
+  // Eslatma: orderBy ishlatilmaydi — Firestore composite index talab qilishi
+  // mumkin (Firebase konsolida qo'lda index yaratmasdan xatolik berishi mumkin).
+  // Shu sababli saralashni JS tomonda qilamiz.
   const q = F.query(
     F.collection(db, "reviews"),
-    F.where("productId", "==", productId),
-    F.orderBy("createdAt", "desc")
+    F.where("productId", "==", productId)
   );
 
-  F.onSnapshot(q, (snapshot) => {
-    renderReviewsList(productId, snapshot.docs);
-  });
+  F.onSnapshot(
+    q,
+    (snapshot) => {
+      const docs = [...snapshot.docs].sort((a, b) => {
+        const ta = a.data().createdAt?.toMillis ? a.data().createdAt.toMillis() : 0;
+        const tb = b.data().createdAt?.toMillis ? b.data().createdAt.toMillis() : 0;
+        return tb - ta;
+      });
+      renderReviewsList(productId, docs);
+    },
+    (err) => {
+      console.error("Reviews snapshot error:", err);
+      const listEl = document.getElementById(`reviewsList-${productId}`);
+      if (listEl) {
+        listEl.innerHTML = `<p class="reviewsEmpty">Sharhlarni yuklashda xatolik. Internetni tekshiring.</p>`;
+      }
+    }
+  );
 }
 
 function renderReviewsList(productId, docs) {

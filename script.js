@@ -40,6 +40,7 @@ const pages = {
   shop: document.getElementById("shop"),
   cart: document.getElementById("cart"),
   contact: document.getElementById("contact"),
+  profile: document.getElementById("profile"),
 };
 
 const navBtns = document.querySelectorAll(".navBtn");
@@ -259,11 +260,84 @@ function closeModal() {
   orderModal.classList.remove("show");
 }
 
+function buildOrderMessage(region, city, phone) {
+  let message = "🛍 Yangi buyurtma!\n\n";
+  message += "📦 Mahsulotlar:\n";
+
+  let total = 0;
+
+  cart.forEach((item) => {
+    const lineTotal = item.price * item.qty;
+    total += lineTotal;
+    message += `• ${item.name} (${item.color}) — ${item.qty} dona — ${lineTotal.toLocaleString("ru-RU")} so'm\n`;
+  });
+
+  message += `\n💰 Jami: ${total.toLocaleString("ru-RU")} so'm`;
+
+  if (region === "Jizzax shahri") {
+    message += `\n\n🚀 Yetkazish: Yandex orqali (Jizzax shahri ichida, BEPUL)`;
+    message += `\n📍 Mo'ljal/manzil: ${city}`;
+  } else {
+    message += `\n\n📦 Yetkazish: BTS pochta orqali`;
+    message += `\n📍 Manzil: ${region}, ${city}`;
+  }
+
+  message += `\n📞 Telefon: ${phone}`;
+
+  const profile = window.ShopAuth && window.ShopAuth.getProfile ? window.ShopAuth.getProfile() : null;
+  if (profile && profile.nickname) {
+    message += `\n👤 Profil: ${profile.nickname}`;
+  }
+
+  return message;
+}
+
+function sendOrderAndReset(region, city, phone) {
+  const message = buildOrderMessage(region, city, phone);
+  const url = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+
+  closeModal();
+  cart = [];
+  renderCart();
+
+  regionSelect.value = "";
+  cityInput.value = "";
+  phoneInput.value = "";
+  jizzaxNote.classList.remove("show");
+  cityLabel.textContent = "Shahar / Tuman / Mahalla";
+  cityInput.placeholder = "Masalan: Bektemir tumani, ...";
+}
+
 orderBtn.addEventListener("click", () => {
   if (cart.length === 0) {
     alert("Savat bo'sh, avval mahsulot qo'shing!");
     return;
   }
+
+  // Profil egasi bo'lsa va manzil/telefon avvaldan to'ldirilgan bo'lsa —
+  // savolsiz, bir bosishda buyurtma
+  const profile = window.ShopAuth && window.ShopAuth.getProfile ? window.ShopAuth.getProfile() : null;
+
+  if (profile && profile.phone && profile.region && profile.city) {
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const confirmMsg = `${profile.nickname}, buyurtmani tasdiqlaysizmi?\n\nManzil: ${profile.region}, ${profile.city}\nTelefon: ${profile.phone}\nJami: ${total.toLocaleString("ru-RU")} so'm`;
+    if (confirm(confirmMsg)) {
+      sendOrderAndReset(profile.region, profile.city, profile.phone);
+    }
+    return;
+  }
+
+  // Profil bor, lekin manzil to'liq emas — modalni ochib, borini oldindan to'ldiramiz
+  if (profile) {
+    if (profile.phone) phoneInput.value = profile.phone;
+    if (profile.city) cityInput.value = profile.city;
+    if (profile.region) {
+      regionSelect.value = profile.region;
+      regionSelect.dispatchEvent(new Event("change"));
+    }
+  }
+
   openModal();
 });
 
@@ -299,42 +373,7 @@ confirmOrderBtn.addEventListener("click", () => {
 
   if (!valid) return;
 
-  let message = "🛍 Yangi buyurtma!\n\n";
-  message += "📦 Mahsulotlar:\n";
-
-  let total = 0;
-
-  cart.forEach((item) => {
-    const lineTotal = item.price * item.qty;
-    total += lineTotal;
-    message += `• ${item.name} (${item.color}) — ${item.qty} dona — ${lineTotal.toLocaleString("ru-RU")} so'm\n`;
-  });
-
-  message += `\n💰 Jami: ${total.toLocaleString("ru-RU")} so'm`;
-
-  if (isJizzaxShahri()) {
-    message += `\n\n🚀 Yetkazish: Yandex orqali (Jizzax shahri ichida, BEPUL)`;
-    message += `\n📍 Mo'ljal/manzil: ${city}`;
-  } else {
-    message += `\n\n📦 Yetkazish: BTS pochta orqali`;
-    message += `\n📍 Manzil: ${region}, ${city}`;
-  }
-
-  message += `\n📞 Telefon: ${phone}`;
-
-  const url = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
-
-  closeModal();
-  cart = [];
-  renderCart();
-
-  regionSelect.value = "";
-  cityInput.value = "";
-  phoneInput.value = "";
-  jizzaxNote.classList.remove("show");
-  cityLabel.textContent = "Shahar / Tuman / Mahalla";
-  cityInput.placeholder = "Masalan: Bektemir tumani, ...";
+  sendOrderAndReset(region, city, phone);
 });
 
 /* ==========================

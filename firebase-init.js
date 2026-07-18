@@ -53,9 +53,8 @@ const googleProvider = new GoogleAuthProvider();
 setPersistence(auth, browserLocalPersistence);
 
 // ===== CLOUDINARY (rasm yuklash uchun) =====
-// Behruz Cloudinary ma'lumotlarini bergach shu ikkalasini to'ldiramiz:
-export const CLOUDINARY_CLOUD_NAME = "YOUR_CLOUD_NAME";
-export const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET";
+window.CLOUDINARY_CLOUD_NAME = "mlolecem";
+window.CLOUDINARY_UPLOAD_PRESET = "onlineshop";
 
 // Boshqa fayllar (auth.js, reviews.js) shu narsalardan foydalanadi
 window.Firebase = {

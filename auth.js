@@ -3,7 +3,7 @@
 // ==========================================
 
 const F = window.Firebase;
-const { auth, db, googleProvider } = F;
+const { auth, db } = F;
 
 const authBox = document.getElementById("authBox");
 
@@ -81,12 +81,6 @@ function renderAuthForm() {
           <i class="fa-solid fa-user-plus"></i> Ro'yxatdan o'tish
         </button>
       </form>
-
-      <div class="authDivider"><span>yoki</span></div>
-
-      <button id="googleBtn" class="googleBtn">
-        <i class="fa-brands fa-google"></i> Google bilan kirish
-      </button>
 
       <a href="https://t.me/inomoof" target="_blank" class="forgotLink">
         Parolni unutdingizmi? Telegram orqali yozing
@@ -169,27 +163,6 @@ function renderAuthForm() {
     }
   });
 
-  document.getElementById("googleBtn").addEventListener("click", async () => {
-    errorBox.textContent = "";
-    try {
-      const result = await F.signInWithPopup(auth, googleProvider);
-      const userRef = F.doc(db, "users", result.user.uid);
-      const snap = await F.getDoc(userRef);
-      if (!snap.exists()) {
-        await F.setDoc(userRef, {
-          nickname: result.user.displayName || "Google User",
-          phone: "",
-          region: "",
-          city: "",
-          photoURL: result.user.photoURL || "",
-          isOwner: false,
-          createdAt: F.serverTimestamp(),
-        });
-      }
-    } catch (err) {
-      errorBox.textContent = "Google bilan kirishda xatolik yuz berdi.";
-    }
-  });
 }
 
 // ==========================================

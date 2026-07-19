@@ -128,6 +128,7 @@ function initReviewsSection(section) {
         uid: user.uid,
         nickname: profile?.nickname || "Foydalanuvchi",
         photoURL: profile?.photoURL || "",
+        isOwner: !!(profile && profile.isOwner),
         stars: selectedStars,
         text,
         reviewImage: imageUrl,
@@ -181,7 +182,18 @@ function initReviewsSection(section) {
   );
 }
 
+// productId bo'yicha oxirgi kelgan sharhlar va nechtasi ko'rsatilayotgani
+const reviewsCache = {};
+const visibleCounts = {};
+
 function renderReviewsList(productId, docs) {
+  reviewsCache[productId] = docs;
+  if (!visibleCounts[productId]) visibleCounts[productId] = 1;
+  paintReviews(productId);
+}
+
+function paintReviews(productId) {
+  const docs = reviewsCache[productId] || [];
   const listEl = document.getElementById(`reviewsList-${productId}`);
   const avgEl = document.getElementById(`avg-${productId}`);
 
@@ -197,8 +209,10 @@ function renderReviewsList(productId, docs) {
 
   const isOwner = window.ShopAuth.isOwner();
   const currentUid = window.ShopAuth.getUser()?.uid;
+  const visibleCount = Math.min(visibleCounts[productId] || 1, docs.length);
+  const visibleDocs = docs.slice(0, visibleCount);
 
-  listEl.innerHTML = docs
+  const itemsHtml = visibleDocs
     .map((docSnap) => {
       const r = docSnap.data();
       const id = docSnap.id;
@@ -211,12 +225,16 @@ function renderReviewsList(productId, docs) {
       const avatarSrc =
         r.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(r.nickname)}`;
 
+      const ownerCheck = r.isOwner
+        ? `<span class="verifiedBadge"><i class="fa-solid fa-circle"></i><i class="fa-solid fa-check checkIcon"></i></span>`
+        : "";
+
       return `
         <div class="reviewItem" data-review-id="${id}">
           <div class="reviewTop">
             <img src="${avatarSrc}" class="reviewAvatar">
             <div class="reviewMeta">
-              <span class="reviewNick">${r.nickname}</span>
+              <span class="reviewNick">${escapeHtml(r.nickname)}${ownerCheck}</span>
               <span class="reviewStars">${starsHtml}</span>
             </div>
             ${canDelete ? `<button class="reviewDeleteBtn" data-review-id="${id}"><i class="fa-solid fa-trash"></i></button>` : ""}
@@ -238,6 +256,18 @@ function renderReviewsList(productId, docs) {
     })
     .join("");
 
+  const remaining = docs.length - visibleCount;
+  let footerHtml = "";
+
+  if (remaining > 0) {
+    footerHtml += `<button class="loadMoreBtn" id="loadMoreBtn-${productId}"><i class="fa-solid fa-chevron-down"></i> Ko'proq (${Math.min(remaining, 3)} ta)</button>`;
+  }
+  if (visibleCount > 1) {
+    footerHtml += `<button class="collapseBtn" id="collapseBtn-${productId}"><i class="fa-solid fa-chevron-up"></i> Yopish</button>`;
+  }
+
+  listEl.innerHTML = itemsHtml + (footerHtml ? `<div class="reviewsFooter">${footerHtml}</div>` : "");
+
   // O'chirish tugmalari
   listEl.querySelectorAll(".reviewDeleteBtn").forEach((btn) => {
     btn.addEventListener("click", async () => {
@@ -256,6 +286,23 @@ function renderReviewsList(productId, docs) {
       });
     });
   });
+
+  const loadMoreBtn = document.getElementById(`loadMoreBtn-${productId}`);
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", () => {
+      visibleCounts[productId] = Math.min((visibleCounts[productId] || 1) + 3, docs.length);
+      paintReviews(productId);
+    });
+  }
+
+  const collapseBtn = document.getElementById(`collapseBtn-${productId}`);
+  if (collapseBtn) {
+    collapseBtn.addEventListener("click", () => {
+      visibleCounts[productId] = 1;
+      paintReviews(productId);
+      listEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }
 }
 
 function escapeHtml(str) {

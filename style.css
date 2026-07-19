@@ -773,6 +773,8 @@ box-shadow:0 0 30px rgba(255,60,172,.15);
 
 .navBtn{
 
+position:relative;
+
 background:none;
 
 border:none;
@@ -3081,5 +3083,175 @@ gap:6px;
 .ownerReplyBtn:hover{
 
 background:rgba(212,175,55,.1);
+
+}
+
+/*=========================
+CART BADGE (miqdor belgisi)
+==========================*/
+
+.cartBadge{
+
+position:absolute;
+
+top:-2px;
+
+right:-10px;
+
+min-width:19px;
+
+height:19px;
+
+padding:0 4px;
+
+border-radius:50%;
+
+background:linear-gradient(45deg,#ff3cac,#ff6b6b);
+
+color:#fff;
+
+font-size:11px;
+
+font-weight:700;
+
+font-family:'Poppins',sans-serif;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+box-shadow:0 0 10px rgba(255,60,172,.6);
+
+transform:scale(0);
+
+transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+
+}
+
+.cartBadge.show{
+
+transform:scale(1);
+
+}
+
+.navBtn.bump{
+
+animation:navBump .5s cubic-bezier(.34,1.56,.64,1);
+
+}
+
+@keyframes navBump{
+
+0%{transform:translateY(0) scale(1);}
+
+30%{transform:translateY(-10px) scale(1.25);}
+
+55%{transform:translateY(0) scale(.92);}
+
+100%{transform:translateY(0) scale(1);}
+
+}
+
+/*=========================
+FLY TO CART (uchib tushish effekti)
+==========================*/
+
+.flyImage{
+
+position:fixed;
+
+z-index:3000;
+
+border-radius:14px;
+
+object-fit:cover;
+
+pointer-events:none;
+
+box-shadow:0 10px 30px rgba(0,0,0,.4);
+
+transition:top .75s cubic-bezier(.5,-0.3,.7,1),
+
+left .75s cubic-bezier(.5,-0.3,.7,1),
+
+width .75s cubic-bezier(.5,-0.3,.7,1),
+
+height .75s cubic-bezier(.5,-0.3,.7,1),
+
+opacity .75s ease .35s;
+
+}
+
+/*=========================
+REVIEWS: LOAD MORE / COLLAPSE
+==========================*/
+
+.reviewsFooter{
+
+display:flex;
+
+flex-direction:column;
+
+gap:8px;
+
+margin-top:4px;
+
+}
+
+.loadMoreBtn,
+.collapseBtn{
+
+width:100%;
+
+padding:11px;
+
+border-radius:12px;
+
+border:1px solid rgba(212,175,55,.3);
+
+background:rgba(212,175,55,.06);
+
+color:#f5d67f;
+
+font-size:13px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:8px;
+
+}
+
+.loadMoreBtn:hover,
+.collapseBtn:hover{
+
+background:rgba(212,175,55,.15);
+
+}
+
+.collapseBtn{
+
+border-color:rgba(255,255,255,.12);
+
+background:rgba(255,255,255,.03);
+
+color:#a89f8d;
+
+}
+
+.collapseBtn:hover{
+
+color:#f5d67f;
 
 }

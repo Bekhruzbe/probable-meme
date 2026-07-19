@@ -134,6 +134,7 @@ document.querySelectorAll(".addCart").forEach((btn) => {
     }
 
     renderCart();
+    flyToCart(card, image);
 
     btn.textContent = "Qo'shildi ✅";
     setTimeout(() => {
@@ -143,12 +144,70 @@ document.querySelectorAll(".addCart").forEach((btn) => {
 });
 
 /* ==========================
+   MAHSULOT SAVATGA "UCHIB TUSHISH" EFFEKTI
+========================== */
+function flyToCart(card, imageSrc) {
+  const cartNavBtn = document.getElementById("cartNavBtn");
+  if (!cartNavBtn || !imageSrc) {
+    bumpCartIcon();
+    return;
+  }
+
+  const sourceImg = card.querySelector(".slider img.active") || card.querySelector(".slider img");
+  const sourceRect = (sourceImg || card).getBoundingClientRect();
+  const targetRect = cartNavBtn.getBoundingClientRect();
+
+  const flyEl = document.createElement("img");
+  flyEl.src = imageSrc;
+  flyEl.className = "flyImage";
+  flyEl.style.top = `${sourceRect.top}px`;
+  flyEl.style.left = `${sourceRect.left}px`;
+  flyEl.style.width = `${sourceRect.width}px`;
+  flyEl.style.height = `${sourceRect.height}px`;
+  flyEl.style.opacity = "1";
+
+  document.body.appendChild(flyEl);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      flyEl.style.top = `${targetRect.top + targetRect.height / 2 - 12}px`;
+      flyEl.style.left = `${targetRect.left + targetRect.width / 2 - 12}px`;
+      flyEl.style.width = "24px";
+      flyEl.style.height = "24px";
+      flyEl.style.opacity = "0";
+    });
+  });
+
+  setTimeout(() => {
+    flyEl.remove();
+    bumpCartIcon();
+  }, 780);
+}
+
+function bumpCartIcon() {
+  const cartNavBtn = document.getElementById("cartNavBtn");
+  if (!cartNavBtn) return;
+  cartNavBtn.classList.remove("bump");
+  void cartNavBtn.offsetWidth; // reflow — animatsiyani qayta ishga tushirish uchun
+  cartNavBtn.classList.add("bump");
+}
+
+/* ==========================
    SAVATNI CHIZISH (RENDER)
 ========================== */
 const cartItemsBox = document.getElementById("cartItems");
 const totalPriceEl = document.getElementById("totalPrice");
+const cartBadgeEl = document.getElementById("cartBadge");
+
+function updateCartBadge() {
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  if (!cartBadgeEl) return;
+  cartBadgeEl.textContent = totalQty;
+  cartBadgeEl.classList.toggle("show", totalQty > 0);
+}
 
 function renderCart() {
+  updateCartBadge();
   cartItemsBox.innerHTML = "";
 
   if (cart.length === 0) {

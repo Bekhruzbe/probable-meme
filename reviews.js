@@ -226,7 +226,7 @@ function paintReviews(productId) {
         r.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(r.nickname)}`;
 
       const ownerCheck = r.isOwner
-        ? `<span class="verifiedBadge"><i class="fa-solid fa-circle"></i><i class="fa-solid fa-check checkIcon"></i></span>`
+        ? `<span class="verifiedBadge" title="Sayt egasi">${window.OWNER_BADGE_SVG}</span>`
         : "";
 
       return `

@@ -171,7 +171,7 @@ function renderAuthForm() {
 function renderProfile() {
   const p = currentProfile || {};
   const ownerBadge = p.isOwner
-    ? `<span class="verifiedBadge" title="Sayt egasi"><i class="fa-solid fa-certificate"></i><i class="fa-solid fa-check checkIcon"></i></span>`
+    ? `<span class="verifiedBadge" title="Sayt egasi">${window.OWNER_BADGE_SVG}</span>`
     : "";
   const ownerTag = p.isOwner ? ` (owner)` : "";
 
@@ -275,3 +275,11 @@ F.onAuthStateChanged(auth, async (user) => {
 
   window.dispatchEvent(new CustomEvent("shop-auth-changed"));
 });
+
+// ==========================================
+// BOG'LANISH SAHIFASIDA "Behruz ✓" YOZUVI
+// ==========================================
+const contactOwnerLine = document.getElementById("contactOwnerLine");
+if (contactOwnerLine) {
+  contactOwnerLine.innerHTML = `Behruz <span class="verifiedBadge" title="Sayt egasi">${window.OWNER_BADGE_SVG}</span>`;
+}
